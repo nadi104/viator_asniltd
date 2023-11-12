@@ -6,7 +6,7 @@ MONGODB_URL = "mongodb+srv://ashini1991:d93GD47lz2M1is85@db-mongodb-nyc1-36942-0
 
 client = MongoClient(MONGODB_URL)
 db = client["kafka_mongo"]
-collection = db["data_analys_asni"]
+collection = db["jan_mar_bkns"]
 
 
 def export_data_for_date_range(st_date, en_date, month):
@@ -17,7 +17,7 @@ def export_data_for_date_range(st_date, en_date, month):
     # formatted_en_date = parsed_en_date.strftime("%Y-%m-%dT00:00:00.000+00:00")
     # print(formatted_en_date)
     query = {
-        "time_stamp": {
+        "vst_date": {
             "$gte": st_date,
             "$lte": en_date
         }
@@ -30,13 +30,14 @@ def export_data_for_date_range(st_date, en_date, month):
         "status": 1,
         "req_type": 1,
         "supp_name": 1,
-        "api_id": 1,
-        "timestamp": 1
+        "api": 1,
+        "time_stamp": 1,
+        "api_id": 1
     }
 
     documents = list(collection.find(query, fields))
 
-    filename = f"{month}2.json"
+    filename = f"data_2023/{month}1bkns.json"
     with open(filename, "w") as json_file:
         json.dump(documents, json_file, default=str)
 
@@ -58,11 +59,6 @@ if __name__ == "__main__":
     #     print(start_date)
     #     print(end_date)
 
-    export_data_for_date_range("2023-03-16 00:00:00", "2023-03-31 23:59:59", 3)
-    #export_data_for_date_range("2023-06-01", "2023-06-30", 6)
+    #export_data_for_date_range("2023-10-01", "2023-10-15", 11)
+    export_data_for_date_range("2023-02-01", "2023-02-15", 2)
 
-    # start_date = "2023-03-01"
-    # end_date = "2023-03-31"
-    # print(start_date)
-    # print(end_date)
-    # export_data_for_date_range(start_date, end_date)
